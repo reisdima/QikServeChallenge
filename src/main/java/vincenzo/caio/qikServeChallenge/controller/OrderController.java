@@ -21,8 +21,8 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Order> addProduct (@RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> addProduct (@RequestBody OrderDto orderDto) {
         Order order = orderService.addProductToOrder(orderDto);
-        return ResponseEntity.status(HttpStatus.OK).body(order);
+        return ResponseEntity.status(HttpStatus.OK).body(OrderDto.fromDomain(order));
     }
 }

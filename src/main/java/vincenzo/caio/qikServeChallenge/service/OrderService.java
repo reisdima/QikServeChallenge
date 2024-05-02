@@ -15,11 +15,13 @@ public class OrderService {
     }
 
     public Order addProductToOrder(OrderDto orderDto) {
-        Order order = orderDto.order();
-        if(order == null) {
+        Order order;
+        if(orderDto.items() == null || orderDto.items().isEmpty()) {
             order = new Order();
+        } else {
+            order = OrderDto.toDomain(orderDto);
         }
-        ProductDto product = productService.getProductById(orderDto.item().id());
+        ProductDto product = productService.getProductById(orderDto.item().product().id());
         order.addItem(ProductDto.toDomain(product), orderDto.item().quantity());
         return order;
     }
