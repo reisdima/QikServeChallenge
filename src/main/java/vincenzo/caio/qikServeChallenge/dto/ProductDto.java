@@ -2,12 +2,15 @@ package vincenzo.caio.qikServeChallenge.dto;
 
 import vincenzo.caio.qikServeChallenge.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public record ProductDto(String id, String name, Integer price, List<PromotionDto> promotions){
+public record ProductDto(String id, String name, Double price, List<PromotionDto> promotions){
 
-    public static ProductDto fromProduct(Product product ){
+    public ProductDto withPrice(Double price) {
+        return new ProductDto(id(), name(), price, promotions());
+    }
+
+    public static ProductDto toDto(Product product ){
         return new ProductDto(
                 product.getId(),
                 product.getName(),

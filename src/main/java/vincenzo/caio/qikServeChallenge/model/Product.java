@@ -5,7 +5,7 @@ import java.util.List;
 public class Product {
     private String id;
     private String name;
-    private Integer price;
+    private Double price;
     private List<Promotion> promotions;
 
     public List<Promotion> getPromotions() {
@@ -32,11 +32,11 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

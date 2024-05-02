@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import vincenzo.caio.qikServeChallenge.dto.ProductDto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +23,19 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllProducts() {
+        System.out.println("Fetching data...");
         String uri = env.getProperty("data.api") + productEndpoint;
         RestTemplate restTemplate = new RestTemplate();
         List<ProductDto> products = new ArrayList<>();
-        System.out.println("URI: " + uri);
         ProductDto[] result = restTemplate.getForObject(uri, ProductDto[].class);
-        for (ProductDto product : result) {
-            products.add(restTemplate.getForObject(String.format("%s/%s", uri, product.id()), ProductDto.class));
+        if(result != null) {
+            for (ProductDto product : result) {
+                ProductDto fetchedProduct = restTemplate.getForObject(String.format("%s/%s", uri, product.id()), ProductDto.class);
+                if(fetchedProduct != null) {
+                    fetchedProduct = fetchedProduct.withPrice(BigDecimal.valueOf(fetchedProduct.price() / 100).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                    products.add(fetchedProduct);
+                }
+            }
         }
         System.out.println("Finished fetching");
 
