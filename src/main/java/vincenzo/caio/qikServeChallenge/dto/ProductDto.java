@@ -1,4 +1,6 @@
 package vincenzo.caio.qikServeChallenge.dto;
 
-public record ProductDto(String id, String name, Integer price, PromotionDto[] promotions){
+import java.util.List;
+
+public record ProductDto(String id, String name, Integer price, List<PromotionDto> promotions){
 }
