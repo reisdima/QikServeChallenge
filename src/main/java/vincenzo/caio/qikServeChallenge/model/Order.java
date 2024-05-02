@@ -2,6 +2,7 @@ package vincenzo.caio.qikServeChallenge.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Order {
     private String id;
@@ -13,11 +14,16 @@ public class Order {
         if(items == null) {
             items = new ArrayList<>();
         }
-        // Verificar se produto já esta no carrinho
-        OrderItem item = new OrderItem();
-        item.setProduct(product);
-        item.setQuantity(quantity);
-        items.add(item);
+        Optional<OrderItem> item = items.stream().filter(i -> i.getProduct().getId().equals(product.getId())).findFirst();
+
+        if(item.isPresent()) {
+            item.get().setQuantity(item.get().getQuantity() + quantity);
+        } else {
+            OrderItem newItem = new OrderItem();
+            newItem.setProduct(product);
+            newItem.setQuantity(quantity);
+            items.add(newItem);
+        }
         this.updatePrice();
     }
 
