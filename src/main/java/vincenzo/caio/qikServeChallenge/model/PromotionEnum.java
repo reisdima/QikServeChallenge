@@ -1,5 +1,7 @@
 package vincenzo.caio.qikServeChallenge.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public enum PromotionEnum {
@@ -12,7 +14,6 @@ public enum PromotionEnum {
                 Integer requiredQuantity = promotion.getRequiredQty();
                 int amountForFree = promotion.getFreeQty() * (item.getQuantity() / requiredQuantity);
                 double newPrice = item.getProduct().getPrice() * (item.getQuantity() - amountForFree);
-                System.out.println("A quantidade de graça apra " + item.getQuantity() + " item é " + amountForFree);
                 return newPrice;
             }
 
@@ -22,26 +23,21 @@ public enum PromotionEnum {
     FLAT_PERCENT {
         public double getUpdatedPrice(OrderItem item) {
             Promotion promotion = item.getProduct().getPromotions().get(0);
-            double newPrice = item.getProduct().getPrice() * ((double) promotion.getAmount() / 100);
-            System.out.println("The price was " + item.getProduct().getPrice()+ ". Applied " + promotion.getAmount() + " percent and now is " + newPrice);
+            double price = item.getProduct().getPrice() * item.getQuantity();
+            double newPrice = price * ((100 - (double) promotion.getAmount()) / 100);
+            newPrice = BigDecimal.valueOf(newPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
             return newPrice;
         }
     },
     QTY_BASED_PRICE_OVERRIDE {
-        // Testar com
-        // 2, 2
-        // 1, 2
-        // 4, 3
-        // 4, 2
         public double getUpdatedPrice(OrderItem item) {
             List<Promotion> promotions = item.getProduct().getPromotions();
             Promotion promotion = promotions.get(0);
-            if (promotion.getRequiredQty() >= item.getQuantity()) {
+            if (item.getQuantity() >= promotion.getRequiredQty()) {
                 Integer quantity = item.getQuantity();
-                Integer productPrice = item.getProduct().getPrice();
+                Double productPrice = item.getProduct().getPrice();
                 double newPrice = productPrice * (quantity % promotion.getRequiredQty());
-                newPrice += ((double) quantity / promotion.getRequiredQty()) * promotion.getPrice();
-                System.out.println("The price was " + item.getProduct().getPrice() + " with " + quantity + ". Now is " + newPrice);
+                newPrice += (Math.floor((double) quantity / promotion.getRequiredQty())) * promotion.getPrice();
                 return newPrice;
             }
             return item.getProduct().getPrice() * item.getQuantity();

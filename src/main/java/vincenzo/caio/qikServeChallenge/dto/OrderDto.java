@@ -1,18 +1,16 @@
 package vincenzo.caio.qikServeChallenge.dto;
 
 import vincenzo.caio.qikServeChallenge.model.Order;
-import vincenzo.caio.qikServeChallenge.model.OrderItem;
 
 import java.util.List;
 
-public record OrderDto(List<OrderItemDto> items, Double normalPrice, Double finalPrice, OrderItemDto item){
+public record OrderDto(List<OrderItemDto> items, Double normalPrice, Double finalPrice){
 
     public static OrderDto fromDomain(Order order) {
         return new OrderDto(
                order.getItems().stream().map(OrderItemDto::toDto).toList(),
                order.getNormalPrice(),
-               order.getFinalPrice(),
-               null
+               order.getFinalPrice()
         );
     }
 
