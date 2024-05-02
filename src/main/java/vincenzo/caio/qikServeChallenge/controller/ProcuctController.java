@@ -3,6 +3,7 @@ package vincenzo.caio.qikServeChallenge.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vincenzo.caio.qikServeChallenge.dto.ProductDto;
@@ -25,6 +26,13 @@ public class ProcuctController {
         List<ProductDto> products = productService.getAllProducts();
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProduct(@PathVariable String id) {
+        ProductDto product = productService.getProductById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
 
