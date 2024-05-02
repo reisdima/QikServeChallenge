@@ -1,5 +1,6 @@
 package vincenzo.caio.qikServeChallenge.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +23,7 @@ public class ProductService {
         this.env = env;
     }
 
+    @Cacheable("products")
     public List<ProductDto> getAllProducts() {
         System.out.println("Fetching data...");
         String uri = env.getProperty("data.api") + productEndpoint;
@@ -42,6 +44,7 @@ public class ProductService {
         return products;
     }
 
+    @Cacheable("product")
     public ProductDto getProductById(String id) {
         List<ProductDto> productsDto = getAllProducts();
         Optional<ProductDto> product = Optional.of(productsDto.stream().filter(p -> p.id().equals(id)).toList().get(0));
