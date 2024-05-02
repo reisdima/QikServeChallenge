@@ -1,9 +1,20 @@
 package vincenzo.caio.qikServeChallenge.model;
 
+import java.util.List;
+
 public class Product {
-    String id;
-    String name;
-    Integer price;
+    private String id;
+    private String name;
+    private Integer price;
+    private List<Promotion> promotions;
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
+    }
 
     public String getId() {
         return id;
