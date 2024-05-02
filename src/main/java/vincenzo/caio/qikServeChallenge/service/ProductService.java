@@ -1,15 +1,13 @@
 package vincenzo.caio.qikServeChallenge.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import vincenzo.caio.qikServeChallenge.dto.ProductDto;
-import vincenzo.caio.qikServeChallenge.model.Product;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -34,5 +32,11 @@ public class ProductService {
         System.out.println("Finished fetching");
 
         return products;
+    }
+
+    public ProductDto getProductById(String id) {
+        List<ProductDto> productsDto = getAllProducts();
+        Optional<ProductDto> product = Optional.of(productsDto.stream().filter(p -> p.id().equals(id)).toList().get(0));
+        return product.get();
     }
 }
